@@ -19,6 +19,11 @@
 			<name>Kevin Rossouw</name>
 			<email>jkrossouw@live.co.za</email>
 		</developer>
+		<developer>
+			<id>21765944</id>
+			<name>Rudi Thiel</name>
+			<email>rudi@rudithiel.com</email>
+		</developer>
 	</developers>
 
 	<properties>

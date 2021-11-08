@@ -82,9 +82,18 @@ public class SPSConnection implements ISPSConnection {
 			@Override
 			public void call(Object... data) {
 				receiveConnectionID((int) data[0]);
+				subscribe(0,0,0);
 			}
 		});
-
+		
+		socket.on("getType", new Emitter.Listener() {
+			
+			@Override
+			public void call(Object... args) {
+				socket.emit("type", "client");
+			}
+		});
+		
 		socket.on("publication", new Emitter.Listener() {
 			@Override
 			public void call(Object... data) {
@@ -96,7 +105,6 @@ public class SPSConnection implements ISPSConnection {
 				
 				if (packet.packet instanceof EstablishConnectionPacket) {
 					EstablishConnectionPacket loginPacket = (EstablishConnectionPacket)packet.packet;
-					//LoginStartPacket loginPacket = (LoginStartPacket)packet.packet;
 					username = loginPacket.getUsername();
 					if (loginPacket.establishConnection()) {
 						ConsoleIO.println("SPSConnection::publication Must establish new connection for session <"+username+">");
@@ -116,7 +124,6 @@ public class SPSConnection implements ISPSConnection {
 				} else if (listeners.containsKey(username)) {					
 					//listeners.get(username).packetReceived(packet.packet);
 					ConsoleIO.println("SPSConnection::publication => Sending packet <"+packet.packet.getClass().getSimpleName()+"> for player <"+username+"> at <"+x+":"+y+":"+radius+">");
-					
 					listeners.get(username).sendPacket(packet.packet);
 				} else {
 					ConsoleIO.println("SPSConnection::publication => Received a packet for an unknown session <"+username+">");
@@ -189,14 +196,14 @@ public class SPSConnection implements ISPSConnection {
 			double z = ((ClientPlayerMovementPacket) packet.packet).getZ();
 			x = (int) x;
 			z = (int) z;
-			socket.emit("subscribe", x, z, 10);
+			socket.emit("subscribe", x, z, 50);
 		} else if ((packet.packet instanceof ClientPlayerPositionRotationPacket)) {
 			ConsoleIO.println("POSITION PACKET");
 			double x = ((ClientPlayerMovementPacket) packet.packet).getX();
 			double z = ((ClientPlayerMovementPacket) packet.packet).getZ();
 			x = (int) x;
 			z = (int) z;
-			socket.emit("subscribe", x, z, 10);
+			socket.emit("subscribe", x, z, 50);
 		}
 		//convert to JSON
 		Gson gson = new Gson();
@@ -208,8 +215,8 @@ public class SPSConnection implements ISPSConnection {
 
 
 	@Override
-	public void subscribe(String channel) {
-		socket.emit("subscribe", channel);
+	public void subscribe(int x, int z, int aoi) {
+		socket.emit("subscribe", x, z, 50);
 		// TODO Auto-generated method stub
 
 	}

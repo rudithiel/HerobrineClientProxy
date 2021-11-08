@@ -134,7 +134,6 @@ public class SPSSession implements IServerSession {
 	}
 	
 
-
 	@Override
 	public void sendPacket(Packet packet) {
 		packetHandler.sendPacket(packet);		

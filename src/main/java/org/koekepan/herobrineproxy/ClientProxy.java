@@ -52,7 +52,6 @@ public class ClientProxy {
 		this.spsConnection = new SPSConnection(this.serverHost, 3000);
 		ConsoleIO.println("Connecting to sps server");
 		this.spsConnection.connect();
-		this.spsConnection.subscribe("login");
 		
 		server.addListener(new ServerAdapter() {
 			
@@ -67,7 +66,6 @@ public class ClientProxy {
 
 			@Override
 			public void sessionRemoved(SessionRemovedEvent event) {
-				
 				sessions.remove(event.getSession()).disconnect();
 			}
 		});
